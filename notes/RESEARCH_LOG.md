@@ -56,3 +56,32 @@
   lift over *each* honest baseline, and a dataset-construction panel (dedup, conflicts, splits,
   class balance). Verified: collector restarted & regenerated status.json, authed curl 200 /
   anon 401, page JS passes `node --check`.
+
+## 2026-06-28 — Second CNN run (dims 5–12) + DB near 10M: the lift widens with dimension
+- **DB growth.** 9,971,096 mosaics across dims 3–20, up +1,176,474 (~+1.18M) since the last
+  note's 8.79M — and now essentially at the 10M mark. Composition: 6,861,150
+  suitably-connected (68.8% connectivity rate), 2,255,244 labeled (32.9% label coverage of the
+  SC set), 150,422 knotted (6.67% of labeled). The shape is unchanged from before — dims 3–6
+  exhaustive-ish, 7–10 sampled at 400k, 11–14 at a balanced 60k (5k/5k), and **dims 15–20 still
+  carry 0 unknot / 0 knotted** (connectivity filter run, unknot-vs-knotted classification not),
+  so the high-dim regime remains untrainable. Same standing watch item as the last two notes.
+- **Second real training run** (results/20260628T032325Z_unknot_cnn.json), unknot_detection,
+  this time on **dims 5–12** and at full scale: 183,026 raw rows → 179,525 unique canonical
+  (3,501 collapsed, **0 label conflicts**), 70/15/15 split → train 125,667 / test **26,929**.
+  That test set is ~57× the first run's n=472, so the metric is now on solid ground. CNN:
+  balanced acc **0.8750**, F1 0.870, precision 0.912, recall 0.832, specificity 0.918
+  (confusion tp 11329 / tn 12221 / fp 1089 / fn 2290). Early-stopped at 8/15 epochs (patience 5).
+- **The lift grew, and *why* is the interesting part.** Honest baselines on this set:
+  majority 0.50, crossing-count==0 rule 0.520, **logreg-on-handcounts 0.7144**. CNN lift over
+  the best baseline = **+0.1606** — up from +0.096 on the first (dims 3–7) run. Note that the
+  handcounts-logreg baseline itself *fell* from 0.806 (dims 3–7) to 0.714 (dims 5–12). So the
+  widening gap isn't the CNN getting luckier on more data; it's that **hand-counted features
+  degrade faster than the CNN as dimension rises**. Higher-dimensional diagrams admit more
+  complex spatial arrangements that crossing/strand tallies can't separate, while the CNN's 2-D
+  structural read keeps holding (0.903→0.875, a mild drop) — exactly the regime where the
+  mosaic-CNN premise should pay off, now with evidence at scale.
+- **Next / watch.** (1) The dims 15–20 unknot/knotted labeling run remains the gating item for
+  pushing past dim 12. (2) Recall (0.832) trailing specificity (0.918) says the model still
+  misses a chunk of the positive class — worth seeing whether more epochs (it stopped at 8) or
+  the harder high dims move that. (3) With both runs now surfaced on the dashboard, the lift
+  trend (+0.096 → +0.161) is the headline to keep tracking as dims extend.
