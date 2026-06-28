@@ -30,12 +30,20 @@ invariants are learnable** and **how that scales** with mosaic dimension and dat
   dihedral symmetry — equivariance should help and is a clean research angle).
 
 ## 3. Invariant targets (escalating difficulty)
-1. **Unknot detection** (binary) — baseline; data ready.
-2. **Connectivity / component count / has-crossings** — already labeled in the DB.
-3. **Crossing number** (ordinal/regression) — via `mosaics.py:numCrossings`.
-4. **Knot-type classification** (unknot/trefoil/figure-8/…) — labels via PD-code oracle.
-5. **Polynomial invariants** (Jones, determinant, signature) — PD-code → SnapPy/Sage oracle.
+1. **Unknot detection** (binary) — the genuinely-hard reference task; data ready. (Result:
+   CNN +16pt balanced-accuracy over the best honest baseline on a leakage-safe split — real lift.)
+2. **Knot-type classification** (unknot/trefoil/figure-8/…) — labels via PD-code oracle.
+3. **Polynomial invariants** (Jones, determinant, signature) — PD-code → SnapPy/Sage oracle.
    The frontier: can a CNN learn a "deep" algebraic invariant from a picture of the knot?
+
+**Excluded — trivially grid-readable (NOT invariant targets):** crossing number and
+has-crossings are *literally* the count/presence of crossing tiles (9,10) on the input grid,
+so a CNN "solving" them is meaningless — confirmed empirically (crossing-number CNN scored
+100%, but a crossing-blind baseline also hit 99.8%). **Dropped permanently** (2026-06-28);
+do not re-add as invariants. (Crossing count remains useful only as a hand-crafted *baseline
+feature* for unknot detection.) Connectivity / component-count are cheap-to-compute and serve
+as sanity checks, not headline invariants. The interesting frontier is the **non-grid-readable**
+invariants (knot type, polynomial invariants).
 
 ## 4. Rigor (carry the lessons from the evolutionary-RSI project)
 - **Symmetry-aware dedup to prevent train/test leakage.** Mosaics related by the dihedral
