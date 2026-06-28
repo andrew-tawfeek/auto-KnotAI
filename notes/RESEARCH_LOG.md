@@ -85,3 +85,22 @@
   misses a chunk of the positive class — worth seeing whether more epochs (it stopped at 8) or
   the harder high dims move that. (3) With both runs now surfaced on the dashboard, the lift
   trend (+0.096 → +0.161) is the headline to keep tracking as dims extend.
+
+## 2026-06-28 — DB past 11.4M: labeling pours into dims 5–6, knotted-rate dilutes
+- **DB growth.** 11,463,542 mosaics across dims 3–20, **+1,492,446 (~+1.49M)** since the last
+  note's 9.97M. Composition: 7,924,737 suitably-connected (connectivity rate up a touch to
+  **69.1%**), 2,630,023 labeled (label coverage of the SC set up to **33.2%**, +374,779 labels),
+  165,281 knotted. Effectively all of this growth is in **dim 6** (now 8.04M) and **dim 5**
+  (1.16M) — the exhaustive-ish low dims — while dims 7–10 hold at 400k, 11–14 at the balanced
+  60k (5k/5k), and **dims 15–20 still sit at 0 unknot / 0 knotted**. Same standing gate as the
+  last three notes: the high-dim regime stays untrainable until that classification run lands.
+- **The composition tell.** The 374,779 new labels split ~359,920 unknot / ~14,859 knotted —
+  only **3.96% knotted**, well under the corpus-wide 6.28%. So the knotted *rate* ticked down
+  (6.67% → **6.28%**) not because knots got rarer but because the fresh labels are all low-dim
+  (dim 5–6) where unknots dominate. Worth remembering when reading the headline knotted-fraction:
+  it's currently being pulled toward the easy end of the dimension range, the opposite direction
+  from where the signal-rich hard diagrams live.
+- **No new training.** Still the two real runs (dims 3–7, lift +0.096; dims 5–12, lift +0.161) —
+  nothing new landed in the Results panel this cycle. The DB is feeding the trainable low-dim
+  pool, but the next *result* worth waiting on is still either a higher-dim retrain or the 15–20
+  labeling that unlocks it. Lift trend to keep tracking: +0.096 → +0.161.
