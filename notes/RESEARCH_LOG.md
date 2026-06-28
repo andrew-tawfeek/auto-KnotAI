@@ -36,3 +36,23 @@
   labeling run for dims 15–20 so the high-dimensional regime becomes trainable. (3) Current
   result is small (3149 canonical examples); more dims = more data and a sterner test of
   generalization.
+
+## 2026-06-28 — Dashboard: expanded mosaic / dataset / training statistics ("?" request)
+- Andrew via the "?" channel: *"Add some more general statistics on the mosaics... more
+  data and statistics on the dataset and the training."* Built it end-to-end.
+- **collector.py.** (1) Fixed a real surfacing bug: result JSON nests CNN metrics under
+  `cnn` and baselines as a list, but `scan_results()` only looked for flat keys, so the one
+  real run was showing as `null` on the page. Now parses the nested `cnn` block + baselines
+  list, and surfaces full per-run detail (precision/recall/specificity/F1, confusion matrix,
+  every honest baseline, and the leakage-safe split stats: raw→canonical dedup, collapsed,
+  label conflicts, train/val/test sizes, class balance, pad/seed). (2) Added `db.summary`:
+  derived corpus stats (suitably-connected total + connectivity rate, labeled total + label
+  coverage, knotted total + knotted rate, labeled vs unlabeled dimension lists, dim range).
+- **index.html.** Database tab now shows 8 summary cards (added suitably-connected %, labeled,
+  knotted %, unknot, dim range, unlabeled-dims warning), a new "Composition by dimension" line
+  chart (connectivity rate + knotted-fraction-among-labeled — the climb is visible), and
+  within-dimension conn%/knot% columns in the breakdown table. Results tab now renders a full
+  per-run detail card: CNN metric chips, a confusion matrix, a baseline table with the CNN's
+  lift over *each* honest baseline, and a dataset-construction panel (dedup, conflicts, splits,
+  class balance). Verified: collector restarted & regenerated status.json, authed curl 200 /
+  anon 401, page JS passes `node --check`.
