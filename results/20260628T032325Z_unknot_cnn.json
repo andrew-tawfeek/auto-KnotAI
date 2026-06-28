@@ -1,0 +1,114 @@
+{
+  "task": "unknot_detection",
+  "timestamp": "2026-06-28T03:23:25.251051+00:00",
+  "dims": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "split_meta": {
+    "collapse": {
+      "raw_rows": 183026,
+      "unique_canonical": 179525,
+      "collapsed": 3501,
+      "label_conflicts": 0
+    },
+    "pad_to": 12,
+    "seed": 42,
+    "val_fraction": 0.15,
+    "test_fraction": 0.15,
+    "sizes": {
+      "train": 125667,
+      "val": 26929,
+      "test": 26929
+    },
+    "class_balance": {
+      "train": {
+        "0": 62113,
+        "1": 63554
+      },
+      "val": {
+        "0": 13310,
+        "1": 13619
+      },
+      "test": {
+        "0": 13310,
+        "1": 13619
+      }
+    }
+  },
+  "hyperparams": {
+    "epochs": 15,
+    "trained_epochs": 8,
+    "batch_size": 32,
+    "seed": 42,
+    "conv_filters": [
+      32,
+      64,
+      64,
+      32
+    ],
+    "dense_units": 0,
+    "patience": 5,
+    "class_weight": {
+      "0": 1.0115998261233559,
+      "1": 0.9886631840639456
+    }
+  },
+  "cnn": {
+    "accuracy": 0.8745218908982881,
+    "balanced_accuracy": 0.8750171885534247,
+    "precision": 0.9123047189563537,
+    "recall": 0.8318525589250312,
+    "specificity": 0.9181818181818182,
+    "f1": 0.8702231439874025,
+    "confusion": {
+      "tp": 11329,
+      "tn": 12221,
+      "fp": 1089,
+      "fn": 2290
+    }
+  },
+  "baselines": [
+    {
+      "name": "majority_class",
+      "accuracy": 0.5057373092205429,
+      "balanced_accuracy": 0.5,
+      "confusion": {
+        "tp": 13619,
+        "tn": 0,
+        "fp": 13310,
+        "fn": 0
+      },
+      "predicted_label": 1
+    },
+    {
+      "name": "crossing_zero_rule",
+      "accuracy": 0.514835307660886,
+      "balanced_accuracy": 0.5203392319553565,
+      "confusion": {
+        "tp": 554,
+        "tn": 13310,
+        "fp": 0,
+        "fn": 13065
+      }
+    },
+    {
+      "name": "logreg_handcounts",
+      "accuracy": 0.7145456570982955,
+      "balanced_accuracy": 0.7143849063123848,
+      "confusion": {
+        "tp": 9920,
+        "tn": 9322,
+        "fp": 3988,
+        "fn": 3699
+      }
+    }
+  ],
+  "cnn_balanced_accuracy_lift_over_best_baseline": 0.16063228224103987
+}
