@@ -149,3 +149,40 @@
 - **Verified.** JS syntax-checked; charts rendered headlessly against the live status.json (all 4
   produce SVG; lift labels +9.6 / +16.1 correct); live authed page returns 200 (401 without auth)
   and contains the new code. No DB / experiment / training-run state touched.
+
+## 2026-06-28 — DB at 14.97M; dims 7–12 retrain queued to test the lift; dim_9 CSV gap flagged
+- **DB growth.** 14,966,130 mosaics across dims 3–20, **+1,185,045 (~+1.19M)** since the 13.78M
+  note. Composition: 10,419,038 suitably-connected (connectivity **69.6%**), 3,507,663 labeled
+  (coverage **33.7%**), 200,113 knotted (**5.71%** of labeled). dims 15–20 still sit at 0 unknot /
+  0 knotted — the same standing gate that keeps the high-dim regime untrainable.
+- **Dim-6 dominance — a 4th confirming data point.** Effectively all of the +1.19M landed in
+  **dim 6**, now **11.54M = 77.1% of the entire corpus** (dim 5 flat at 1.16M; dims 7–14 flat at
+  their 400k / 60k caps). The dilution mechanism holds again: the 296,868 new labels split
+  ~285,062 unknot / ~11,806 knotted = **3.98% knotted**, well under the corpus rate, nudging the
+  knotted fraction 5.86% → **5.71%**. The signal-rich knotted diagrams stay in the higher,
+  under-sampled dims, exactly where a naive proportional draw won't reach them.
+- **Researcher queued the cross-dim test (delegated note executed).** The senior has queued
+  `exp_queue/20260628T040820Z_unknot_highdim_7to12.sh` — an unknot retrain on **dims 7–12 only,
+  dims 3–6 deliberately excluded** to strip the dim-6 mass — to settle whether the **+0.096 →
+  +0.161** lift is real hard-diagram signal or a dim-6 artifact (20 epochs, patience 7, dense-64
+  head to chase the recall<specificity gap, 0.832 vs 0.918). This directly actions the
+  per-dimension-cap recommendation the last three DB notes have been flagging. Not yet run; the
+  Results panel is unchanged (still the two real runs, dims 3–7 +0.096 and dims 5–12 +0.161).
+- **Dataset-readiness check (delegated) — dim_9 CSV is MISSING.** Verified `datasets/unknot/`:
+  the dim 7, 8, 10, 11, 12 CSVs are present but **`dim_9.csv` is absent**, and the committed CSVs
+  are *sample-scale* (dim_7 = 1,000 rows; dims 10–12 = 10k each), not the L4 full-scale the queued
+  run targets. The DB itself carries dim 9 at 400k labeled (53,145 unknot / 14,339 knotted), so a
+  DB-reading harness run is unaffected — but **a CSV-path run would error on the missing dim_9**.
+  Flagged so the queued script doesn't fail on a missing `dim_*.csv`; the full-scale (DB-side)
+  verification is left to the Researcher/L4 since I don't query the running box.
+- **Dashboard upkeep (delegated).** Promoted the run dim-range from a faint inline subscript to a
+  dedicated **`dims` column** in the Results panel, so the incoming dim-6-excluded run (dims 7–12)
+  will line up at-a-glance against the dims 3–7 and dims 5–12 runs. JS syntax-checked; live authed
+  page 200 (401 without auth); new `<th>dims</th>` present; renders 3–7 / 5–12 / 7–12 correctly.
+  Pipeline healthy this cycle: server, collector, and tunnel all up; status.json fresh (~3 min);
+  db.error none (remote box RUNNING on data-gen, expected).
+- **Deferred back to Researcher.** The hard-invariant readiness check (is `pd_code` populated, and
+  how many distinct pd_codes / knot-types per dim 7–10) needs a `DISTINCT` query against the
+  **running** DB plus a collector change — out of my safe routine scope (it would load the live
+  data-gen run), so not executed. This is the gating data for the proposed knot-type and
+  Alexander/Jones experiments; flagging it for the Researcher/engineering to schedule safely.
