@@ -4,10 +4,3 @@ Durable research-direction steering submitted via the dashboard steering-wheel (
 The logistics agent re-reads this file every periodic cycle and treats the LATEST entries as
 the authoritative research direction (observe-and-recommend; it never starts compute itself).
 Distinct from the "?" channel (immediate one-off question/fix). Newest entries appended at the bottom.
-
-
-## 2026-06-28 — steering
-- LOCAL TEST: focus next runs on knot-type classification, not unknot scaling
-
-## 2026-06-28 — steering
-- TUNNEL TEST: try a D4-equivariant architecture
