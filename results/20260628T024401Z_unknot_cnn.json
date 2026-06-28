@@ -1,0 +1,111 @@
+{
+  "task": "unknot_detection",
+  "timestamp": "2026-06-28T02:44:01.442918+00:00",
+  "dims": [
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "split_meta": {
+    "collapse": {
+      "raw_rows": 3535,
+      "unique_canonical": 3149,
+      "collapsed": 386,
+      "label_conflicts": 0
+    },
+    "pad_to": 7,
+    "seed": 42,
+    "val_fraction": 0.15,
+    "test_fraction": 0.15,
+    "sizes": {
+      "train": 2205,
+      "val": 472,
+      "test": 472
+    },
+    "class_balance": {
+      "train": {
+        "0": 1034,
+        "1": 1171
+      },
+      "val": {
+        "0": 221,
+        "1": 251
+      },
+      "test": {
+        "0": 221,
+        "1": 251
+      }
+    }
+  },
+  "hyperparams": {
+    "epochs": 12,
+    "trained_epochs": 11,
+    "batch_size": 32,
+    "seed": 42,
+    "conv_filters": [
+      32,
+      64,
+      64,
+      32
+    ],
+    "dense_units": 0,
+    "patience": 5,
+    "class_weight": {
+      "0": 1.066247582205029,
+      "1": 0.9415029888983775
+    }
+  },
+  "cnn": {
+    "accuracy": 0.9004237288135594,
+    "balanced_accuracy": 0.9025887400623749,
+    "precision": 0.9396551724137931,
+    "recall": 0.8685258964143426,
+    "specificity": 0.9366515837104072,
+    "f1": 0.9026915113871635,
+    "confusion": {
+      "tp": 218,
+      "tn": 207,
+      "fp": 14,
+      "fn": 33
+    }
+  },
+  "baselines": [
+    {
+      "name": "majority_class",
+      "accuracy": 0.5317796610169492,
+      "balanced_accuracy": 0.5,
+      "confusion": {
+        "tp": 251,
+        "tn": 0,
+        "fp": 221,
+        "fn": 0
+      },
+      "predicted_label": 1
+    },
+    {
+      "name": "crossing_zero_rule",
+      "accuracy": 0.5741525423728814,
+      "balanced_accuracy": 0.599601593625498,
+      "confusion": {
+        "tp": 50,
+        "tn": 221,
+        "fp": 0,
+        "fn": 201
+      }
+    },
+    {
+      "name": "logreg_handcounts",
+      "accuracy": 0.8050847457627118,
+      "balanced_accuracy": 0.806187016639325,
+      "confusion": {
+        "tp": 198,
+        "tn": 182,
+        "fp": 39,
+        "fn": 53
+      }
+    }
+  ],
+  "cnn_balanced_accuracy_lift_over_best_baseline": 0.09640172342304987
+}
