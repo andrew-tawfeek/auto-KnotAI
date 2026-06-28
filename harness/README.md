@@ -83,8 +83,8 @@ subgroup `C4`) — the relabel arrays for the rotation ops are already computed 
 | `mosaic_io.py` | parse stringified mosaic → `(n,n)` int array; one-hot → `(n,n,11)`; zero-pad variable `n`; serialize. Reuses `mosaics.py`. |
 | `canonical.py` | **D4 canonical form** for symmetry-aware dedup (the key rigor piece). |
 | `dataset.py`   | load CSV now / SQLite-ready by the documented `mosaics.db` schema; collapse by canonical key; **leakage-safe** stratified split; return one-hot tensors. |
-| `baselines.py` | honest non-CNN baselines. Unknot: majority-class, `num_crossings==0` rule, logreg on hand counts. Crossing: majority-class, crossing-count *oracle*, crossing-blind logreg + k-NN. |
-| `train_cnn.py` | small CNN (adapted from `cnn_train.py`). `train()` = binary unknot detection (sigmoid); `train_crossing()` = multi-class crossing number (softmax, classes 0..6) on the same leakage-safe split; metrics vs baselines → `results/*.json`. |
+| `baselines.py` | honest non-CNN baselines: majority-class, `num_crossings==0` rule, logistic regression on hand counts. |
+| `train_cnn.py` | small CNN (adapted from `cnn_train.py`) for unknot detection on the leakage-safe split; metrics vs baselines → `results/*.json`. |
 | `test_canonical.py` | unit tests proving the D4 canonical form is a correct orbit representative. |
 
 ## Usage
@@ -101,28 +101,7 @@ print(run_all_baselines(s.X_train,s.y_train,s.X_test,s.y_test))"
 
 # Train the CNN (needs TensorFlow); small + CPU-runnable on the sample CSVs
 python3 -m harness.train_cnn --dims 3 4 5 6 7 --epochs 12
-
-# Second invariant: crossing number (multi-class, classes 0..5 and a 6+ bucket)
-python3 -m harness.train_cnn --task crossing --dims 5 6 7 8 --epochs 15
 ```
-
-### Second invariant: crossing number (a deliberately honest null check)
-
-Crossing number is framed as **multi-class** classification with a capped top
-bucket: classes `0,1,2,3,4,5,6+` (class 6 = all `num_crossings >= 6`). The cap
-was chosen from the DB histogram — every class holds ~0.4M–1.5M
-suitably-connected mosaics, so none is tiny. The split reuses the **same D4
-canonical-key dedup** (crossing number is rotation+reflection invariant).
-
-**Honesty caveat (important):** for these mosaics `num_crossings` is *defined*
-as the number of crossing tiles (9,10) on the grid, so it is **exactly
-computable from the input**. The `crossing_count_rule` baseline reads that count
-off the grid and scores ~100% — it is a near-oracle, included precisely to make
-this point. The meaningful comparison is therefore the CNN vs the **learning**
-baselines (majority-class floor = 1/7; crossing-*blind* logreg and k-NN, which
-have the crossing-tile columns removed so they must infer the count from other
-tiles). A CNN that recovers crossing number is confirming it can learn an
-exactly-defined function, not discovering a hard invariant.
 
 ### Scaling to the full DB / GPU later
 

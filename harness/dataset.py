@@ -42,25 +42,7 @@ TASK_LABELS = {
     "unknot": {"sqlite_col": "is_unknot", "csv_col": "Is Unknot"},
     "connected": {"sqlite_col": "is_suitably_connected", "csv_col": None},
     "has_crossing": {"sqlite_col": "has_crossing", "csv_col": None},
-    # Multi-class crossing-number task. The raw integer label is num_crossings;
-    # the loader buckets the sparse tail into a capped top class (see
-    # CROSSING_CAP / bucket_crossings). CSV form stores the raw integer.
-    "crossing": {"sqlite_col": "num_crossings", "csv_col": "Num Crossings"},
 }
-
-# Crossing-number is an integer >= 0 with a long, sparse tail. We frame it as
-# multi-class classification with classes 0,1,2,3,4,5 and a capped "6+" bucket
-# (class 6 == all num_crossings >= 6). The DB histogram (suitably-connected)
-# justifies this: classes 0..5 each hold ~0.4M-1.5M mosaics and the 6+ bucket
-# ~1.2M, so all 7 classes are well populated -- no absurdly tiny class.
-CROSSING_CAP = 6
-NUM_CROSSING_CLASSES = CROSSING_CAP + 1  # 0..CAP inclusive
-
-
-def bucket_crossings(num_crossings, cap=CROSSING_CAP):
-    """Map a raw num_crossings integer to its capped class id (>=cap -> cap)."""
-    v = int(num_crossings)
-    return cap if v >= cap else v
 
 
 @dataclass
@@ -302,31 +284,6 @@ def make_leakage_safe_split(records, val_fraction=0.15, test_fraction=0.15,
             f"test={meta['sizes']['test']}, pad_to={pad_to}"
         )
     return SplitResult(X_train, y_train, X_val, y_val, X_test, y_test, meta)
-
-
-def load_crossing_split(datasets_dir="datasets", dims=None, cap=CROSSING_CAP,
-                        **kwargs):
-    """Build a leakage-safe crossing-number split from the CSVs.
-
-    The CSVs store the raw num_crossings integer (column "Num Crossings"); we
-    bucket each label to its capped class (>=cap -> cap) BEFORE the canonical
-    dedup, so the orbit-collapse and stratified split operate on the final
-    multi-class labels. Crossing number is a D4 invariant, so collapsing the
-    full 8-element orbit into one record is exactly correct here.
-
-    dims: iterable of dimensions; None -> every dim_*.csv under crossing/.
-    """
-    label_col = TASK_LABELS["crossing"]["csv_col"]
-    if dims is None:
-        pattern = os.path.join(datasets_dir, "crossing", "dim_*.csv")
-        records = load_csv_glob(pattern, label_col=label_col)
-    else:
-        records = []
-        for d in dims:
-            path = os.path.join(datasets_dir, "crossing", f"dim_{d}.csv")
-            records.extend(load_csv_records(path, label_col=label_col))
-    records = [(m, bucket_crossings(lbl, cap=cap)) for (m, lbl) in records]
-    return make_leakage_safe_split(records, **kwargs)
 
 
 def load_unknot_split(datasets_dir="datasets", dims=None, **kwargs):
