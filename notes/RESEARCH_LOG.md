@@ -127,3 +127,25 @@
   dims 5–12, lift +0.161). Nothing new landed this cycle; the next *result* worth waiting on is
   still a balanced higher-dim retrain or the dims 15–20 labeling that unlocks past dim 12. Lift
   trend to keep tracking: +0.096 → +0.161.
+
+## 2026-06-28 — Dashboard: cross-run comparison graphs on the Training tab ("?" request)
+- Andrew via the "?" channel: *"Add more graphs on the 'training' tab with the data that compares
+  different metrics to better gauge how training is improving and where it compares between
+  invariants. More plots are needed throughout."* Built it; the Training tab previously had only a
+  results table + per-run detail cards (no cross-run comparison anywhere).
+- **Added four cross-run charts** (index.html only — all data already surfaced by collector, so no
+  server/collector change and nothing to restart; static page served fresh). They appear above the
+  per-run detail and auto-hide until ≥1 real run exists:
+  1. **CNN vs best baseline, by run** — grouped bars per run (chronological), CNN balanced acc vs
+     that run's best baseline, with the **lift called out above each pair** (+9.6 pts → +16.1 pts).
+     This is the "is training improving" view.
+  2. **Metric comparison across runs** — balanced acc / precision / recall / specificity / F1
+     grouped by metric, one colour per run, to see where successive runs gain or trade off.
+  3. **Lift vs training scale** — lift (pts above baseline) vs # train examples, runs ordered by
+     scale; tests the premise that spatial signal holds/grows as data gets larger & harder.
+  4. **Best result per invariant** — strongest run per task (unknot detection today; fills out as
+     connectivity / crossing-number / knot-type land), CNN bar with the best-baseline marked, so
+     invariants compare on both absolute accuracy and lift. This is the "between invariants" view.
+- **Verified.** JS syntax-checked; charts rendered headlessly against the live status.json (all 4
+  produce SVG; lift labels +9.6 / +16.1 correct); live authed page returns 200 (401 without auth)
+  and contains the new code. No DB / experiment / training-run state touched.
