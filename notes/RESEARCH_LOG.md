@@ -104,3 +104,26 @@
   nothing new landed in the Results panel this cycle. The DB is feeding the trainable low-dim
   pool, but the next *result* worth waiting on is still either a higher-dim retrain or the 15–20
   labeling that unlocks it. Lift trend to keep tracking: +0.096 → +0.161.
+
+## 2026-06-28 — DB at 13.78M: dim 6 now 75% of the corpus — a balance flag
+- **DB growth.** 13,781,085 mosaics across dims 3–20, **+2,317,543 (~+2.32M)** since the last
+  note's 11.46M — the largest single-cycle jump yet (prior jumps +1.18M, +1.49M). Composition:
+  9,575,424 suitably-connected (connectivity 69.5%), 3,210,795 labeled (label coverage 33.5%),
+  188,307 knotted (5.86% of labeled). As before, **dims 15–20 still sit at 0 unknot / 0 knotted** —
+  the same standing gate that keeps the high-dim regime untrainable.
+- **The concentration is becoming the story.** Effectively *all* of this cycle's +2.32M landed in
+  **dim 6**, which is now **10.36M mosaics = 75.1% of the entire corpus** (dim 5 unchanged at
+  1.16M; dims 7–14 flat at their 400k / 60k caps). The DB is no longer just "low-dim heavy" — it
+  is dim-6-dominated to the point that any model trained on a naive all-dims pool is implicitly a
+  dim-6 model. **Recommendation (for the training agent / Andrew): the next unknot retrain should
+  sample per-dimension with a cap, not draw proportionally**, or the +0.16 lift trend will quietly
+  become a dim-6 measurement rather than a cross-dimensional one.
+- **Dilution continues, as expected.** The 580,772 new labels split ~557,746 unknot / ~23,026
+  knotted — **3.96% knotted**, again well under the corpus rate, so the knotted fraction ticked
+  6.28% → **5.86%**. Same mechanism as the last two notes (fresh labels are all easy low-dim dim-6
+  unknots), now a third confirming data point. The signal-rich knotted diagrams remain in the
+  higher, under-sampled dims.
+- **No new training.** Results panel unchanged — still the two real runs (dims 3–7, lift +0.096;
+  dims 5–12, lift +0.161). Nothing new landed this cycle; the next *result* worth waiting on is
+  still a balanced higher-dim retrain or the dims 15–20 labeling that unlocks past dim 12. Lift
+  trend to keep tracking: +0.096 → +0.161.
