@@ -1,0 +1,350 @@
+{
+  "task": "crossing_number",
+  "timestamp": "2026-06-28T03:40:17.644682+00:00",
+  "dims": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "label_scheme": {
+    "type": "multiclass_capped",
+    "cap": 6,
+    "classes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "description": "num_crossings bucketed to 0..6; class 6 == num_crossings >= 6 (the '6+' bucket). NOTE: num_crossings equals the count of crossing tiles (9,10) on the grid, so it is exactly computable from the input -- the crossing_count_rule baseline is a near-oracle (~100%). The meaningful comparison is the CNN vs the LEARNING baselines."
+  },
+  "split_meta": {
+    "collapse": {
+      "raw_rows": 237275,
+      "unique_canonical": 228313,
+      "collapsed": 8962,
+      "label_conflicts": 0
+    },
+    "pad_to": 12,
+    "seed": 42,
+    "val_fraction": 0.15,
+    "test_fraction": 0.15,
+    "sizes": {
+      "train": 159817,
+      "val": 34248,
+      "test": 34248
+    },
+    "class_balance": {
+      "train": {
+        "0": 13387,
+        "1": 18123,
+        "2": 21380,
+        "3": 24577,
+        "4": 25183,
+        "5": 25486,
+        "6": 31681
+      },
+      "val": {
+        "0": 2869,
+        "1": 3884,
+        "2": 4581,
+        "3": 5267,
+        "4": 5397,
+        "5": 5461,
+        "6": 6789
+      },
+      "test": {
+        "0": 2869,
+        "1": 3884,
+        "2": 4581,
+        "3": 5267,
+        "4": 5397,
+        "5": 5461,
+        "6": 6789
+      }
+    }
+  },
+  "hyperparams": {
+    "epochs": 15,
+    "trained_epochs": 15,
+    "batch_size": 64,
+    "seed": 42,
+    "conv_filters": [
+      32,
+      64,
+      64,
+      32
+    ],
+    "dense_units": 64,
+    "patience": 5,
+    "class_weight": {
+      "0": 1.7054605214013596,
+      "1": 1.2597803895602273,
+      "2": 1.067867165575304,
+      "3": 0.9289579688326484,
+      "4": 0.9066036612000159,
+      "5": 0.8958251589107745,
+      "6": 0.720652757173069
+    }
+  },
+  "cnn": {
+    "accuracy": 0.9999416024293389,
+    "balanced_accuracy": 0.9999579151147866,
+    "per_class_recall": {
+      "0": {
+        "recall": 1.0,
+        "support": 2869
+      },
+      "1": {
+        "recall": 1.0,
+        "support": 3884
+      },
+      "2": {
+        "recall": 1.0,
+        "support": 4581
+      },
+      "3": {
+        "recall": 1.0,
+        "support": 5267
+      },
+      "4": {
+        "recall": 1.0,
+        "support": 5397
+      },
+      "5": {
+        "recall": 1.0,
+        "support": 5461
+      },
+      "6": {
+        "recall": 0.9997054058035056,
+        "support": 6789
+      }
+    },
+    "confusion_matrix": [
+      [
+        2869,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        3884,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        4581,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        5267,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        5397,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        5461,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        6787
+      ]
+    ],
+    "classes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "baselines": [
+    {
+      "name": "majority_class",
+      "accuracy": 0.19823055360896988,
+      "balanced_accuracy": 0.14285714285714285,
+      "per_class_recall": {
+        "0": {
+          "recall": 0.0,
+          "support": 2869
+        },
+        "1": {
+          "recall": 0.0,
+          "support": 3884
+        },
+        "2": {
+          "recall": 0.0,
+          "support": 4581
+        },
+        "3": {
+          "recall": 0.0,
+          "support": 5267
+        },
+        "4": {
+          "recall": 0.0,
+          "support": 5397
+        },
+        "5": {
+          "recall": 0.0,
+          "support": 5461
+        },
+        "6": {
+          "recall": 1.0,
+          "support": 6789
+        }
+      },
+      "predicted_label": 6
+    },
+    {
+      "name": "crossing_count_rule",
+      "accuracy": 1.0,
+      "balanced_accuracy": 1.0,
+      "per_class_recall": {
+        "0": {
+          "recall": 1.0,
+          "support": 2869
+        },
+        "1": {
+          "recall": 1.0,
+          "support": 3884
+        },
+        "2": {
+          "recall": 1.0,
+          "support": 4581
+        },
+        "3": {
+          "recall": 1.0,
+          "support": 5267
+        },
+        "4": {
+          "recall": 1.0,
+          "support": 5397
+        },
+        "5": {
+          "recall": 1.0,
+          "support": 5461
+        },
+        "6": {
+          "recall": 1.0,
+          "support": 6789
+        }
+      }
+    },
+    {
+      "name": "logreg_handcounts",
+      "accuracy": 0.9966713384723196,
+      "balanced_accuracy": 0.997601161542832,
+      "per_class_recall": {
+        "0": {
+          "recall": 1.0,
+          "support": 2869
+        },
+        "1": {
+          "recall": 1.0,
+          "support": 3884
+        },
+        "2": {
+          "recall": 1.0,
+          "support": 4581
+        },
+        "3": {
+          "recall": 1.0,
+          "support": 5267
+        },
+        "4": {
+          "recall": 1.0,
+          "support": 5397
+        },
+        "5": {
+          "recall": 1.0,
+          "support": 5461
+        },
+        "6": {
+          "recall": 0.9832081307998233,
+          "support": 6789
+        }
+      }
+    },
+    {
+      "name": "knn_handcounts",
+      "accuracy": 0.2984699836486802,
+      "balanced_accuracy": 0.2790111607886613,
+      "per_class_recall": {
+        "0": {
+          "recall": 0.23492506099686303,
+          "support": 2869
+        },
+        "1": {
+          "recall": 0.20056642636457261,
+          "support": 3884
+        },
+        "2": {
+          "recall": 0.20759659462999344,
+          "support": 4581
+        },
+        "3": {
+          "recall": 0.2445414847161572,
+          "support": 5267
+        },
+        "4": {
+          "recall": 0.242171576801927,
+          "support": 5397
+        },
+        "5": {
+          "recall": 0.27577366782640544,
+          "support": 5461
+        },
+        "6": {
+          "recall": 0.5475033141847105,
+          "support": 6789
+        }
+      }
+    }
+  ],
+  "cnn_balanced_accuracy_lift_over_best_learning_baseline": 0.0023567535719546395,
+  "cnn_balanced_accuracy_lift_over_oracle": -4.208488521340037e-05
+}
