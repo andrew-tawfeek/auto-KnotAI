@@ -1,0 +1,1 @@
+# Research notes (auto-maintained)

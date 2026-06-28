@@ -1,0 +1,16 @@
+__pycache__/
+.venv/
+data.py
+*.ipynb
+training_statistics.json
+training_history.csv
+training_test_predictions.csv
+training_curves.png
+cnn_cache/
+.vscode/
+.env
+
+# SQLite mosaic tabulation output
+*.db
+*.db-wal
+*.db-shm
